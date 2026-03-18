@@ -1,148 +1,218 @@
-package sqlDemo;
+package mongodemo;
+import com.mongodb.client.*;
+import org.bson.Document;
 
-import java.sql.*;
+import java.util.Scanner;
+
+import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Accumulators.*;
+import static com.mongodb.client.model.Sorts.descending;
 
 public class FoodDeliverySystem {
 
+    static MongoClient client = MongoClients.create("");
+    static MongoDatabase db = client.getDatabase("foodDB");
+    static MongoCollection<Document> orders = db.getCollection("orders");
+
+    static Scanner sc = new Scanner(System.in);
+
     public static void main(String[] args) {
 
-        String url = "jdbc:mysql://localhost:3306/";
-        String user = "root";
-        String password = "root@123"; // change if your MySQL has password
+        while (true) {
+            System.out.println("\n===== SMART FOOD DELIVERY SYSTEM =====");
+            System.out.println("1. Insert Sample Data");
+            System.out.println("2. View All Orders");
+            System.out.println("3. Orders by City");
+            System.out.println("4. Delivered Orders");
+            System.out.println("5. Total Revenue by City");
+            System.out.println("6. Most Ordered Food Item");
+            System.out.println("7. Avg Order Value per Restaurant");
+            System.out.println("8. Order Status Count");
+            System.out.println("9. Price > 300 (Descending)");
+            System.out.println("10. Create Index");
+            System.out.println("11. Exit");
 
-        try {
+            int choice = sc.nextInt();
 
-            // Step 1: Connect to MySQL Server
-            Connection con = DriverManager.getConnection(url, user, password);
-            Statement st = con.createStatement();
-
-            // Step 2: Create Database
-            st.executeUpdate("CREATE DATABASE IF NOT EXISTS fooddb");
-            System.out.println("Database created successfully");
-
-            // Step 3: Use Database
-            st.execute("USE fooddb");
-
-            // Step 4: Create Tables
-
-            st.executeUpdate("CREATE TABLE IF NOT EXISTS Customers (" +
-                    "customer_id INT PRIMARY KEY," +
-                    "name VARCHAR(50)," +
-                    "city VARCHAR(50)," +
-                    "phone VARCHAR(15))");
-
-            st.executeUpdate("CREATE TABLE IF NOT EXISTS Restaurants (" +
-                    "restaurant_id INT PRIMARY KEY," +
-                    "restaurant_name VARCHAR(50)," +
-                    "city VARCHAR(50)," +
-                    "rating FLOAT)");
-
-            st.executeUpdate("CREATE TABLE IF NOT EXISTS Food_Items (" +
-                    "food_id INT PRIMARY KEY," +
-                    "food_name VARCHAR(50)," +
-                    "price INT," +
-                    "restaurant_id INT," +
-                    "FOREIGN KEY (restaurant_id) REFERENCES Restaurants(restaurant_id))");
-
-            st.executeUpdate("CREATE TABLE IF NOT EXISTS Orders (" +
-                    "order_id INT PRIMARY KEY," +
-                    "customer_id INT," +
-                    "food_id INT," +
-                    "quantity INT," +
-                    "order_date DATE," +
-                    "FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)," +
-                    "FOREIGN KEY (food_id) REFERENCES Food_Items(food_id))");
-
-            System.out.println("Tables created successfully");
-
-            // Step 5: Insert Data
-
-            st.executeUpdate("INSERT INTO Customers VALUES " +
-                    "(1,'Amit','Bangalore','9876543210')," +
-                    "(2,'Anita','Chennai','9876543211')," +
-                    "(3,'Rahul','Mumbai','9876543212')");
-
-            st.executeUpdate("INSERT INTO Restaurants VALUES " +
-                    "(1,'Pizza Hut','Bangalore',4.2)," +
-                    "(2,'Dominos','Chennai',4.0)," +
-                    "(3,'Burger King','Mumbai',4.1)");
-
-            st.executeUpdate("INSERT INTO Food_Items VALUES " +
-                    "(101,'Veg Pizza',250,1)," +
-                    "(102,'Chicken Pizza',300,1)," +
-                    "(103,'Burger',150,3)," +
-                    "(104,'Pasta',200,2)");
-
-            st.executeUpdate("INSERT INTO Orders VALUES " +
-                    "(1,1,101,2,'2026-03-01')," +
-                    "(2,2,104,1,'2026-03-02')," +
-                    "(3,3,103,3,'2026-03-03')");
-
-            System.out.println("Data inserted successfully");
-
-            ResultSet rs;
-
-            // Task 1 – SELECT
-            System.out.println("\nAll Food Items:");
-            rs = st.executeQuery("SELECT * FROM Food_Items");
-            while (rs.next()) {
-                System.out.println(rs.getInt("food_id") + " "
-                        + rs.getString("food_name") + " "
-                        + rs.getInt("price"));
+            switch (choice) {
+                case 1:
+                    insertData();
+                    break;
+                case 2:
+                    viewAll();
+                    break;
+                case 3:
+                    ordersByCity();
+                    break;
+                case 4:
+                    deliveredOrders();
+                    break;
+                case 5:
+                    revenueByCity();
+                    break;
+                case 6:
+                    mostOrderedItem();
+                    break;
+                case 7:
+                    avgByRestaurant();
+                    break;
+                case 8:
+                    statusCount();
+                    break;
+                case 9:
+                    priceGreaterThan300();
+                    break;
+                case 10:
+                    createIndexes();
+                    break;
+                case 11:
+                    System.exit(0);
             }
-
-            // Task 2 – WHERE
-            System.out.println("\nFood items costing more than 200:");
-            rs = st.executeQuery("SELECT * FROM Food_Items WHERE price > 200");
-            while (rs.next()) {
-                System.out.println(rs.getString("food_name") + " " + rs.getInt("price"));
-            }
-
-            // Task 3 – AND
-            System.out.println("\nFood items price >150 AND restaurant_id=2:");
-            rs = st.executeQuery("SELECT * FROM Food_Items WHERE price >150 AND restaurant_id=2");
-            while (rs.next()) {
-                System.out.println(rs.getString("food_name"));
-            }
-
-            // Task 3 – OR
-            System.out.println("\nRestaurants in Chennai OR Bangalore:");
-            rs = st.executeQuery("SELECT * FROM Restaurants WHERE city='Chennai' OR city='Bangalore'");
-            while (rs.next()) {
-                System.out.println(rs.getString("restaurant_name"));
-            }
-
-            // Task 4 – LIKE
-            System.out.println("\nCustomers whose name starts with A:");
-            rs = st.executeQuery("SELECT * FROM Customers WHERE name LIKE 'A%'");
-            while (rs.next()) {
-                System.out.println(rs.getString("name"));
-            }
-
-            System.out.println("\nFood items containing Pizza:");
-            rs = st.executeQuery("SELECT * FROM Food_Items WHERE food_name LIKE '%Pizza%'");
-            while (rs.next()) {
-                System.out.println(rs.getString("food_name"));
-            }
-
-            // Task 5 – BETWEEN
-            System.out.println("\nFood items priced between 100 and 300:");
-            rs = st.executeQuery("SELECT * FROM Food_Items WHERE price BETWEEN 100 AND 300");
-            while (rs.next()) {
-                System.out.println(rs.getString("food_name") + " " + rs.getInt("price"));
-            }
-
-            // Task 6 – ORDER BY
-            System.out.println("\nFood items sorted by price (High to Low):");
-            rs = st.executeQuery("SELECT * FROM Food_Items ORDER BY price DESC");
-            while (rs.next()) {
-                System.out.println(rs.getString("food_name") + " " + rs.getInt("price"));
-            }
-
-            con.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+    }
+
+    // ================= INSERT =================
+    static void insertData() {
+
+        orders.insertMany(java.util.Arrays.asList(
+
+                new Document("order_id", 101)
+                        .append("customer_name", "Rahul")
+                        .append("restaurant", "Pizza Hut")
+                        .append("food_item", "Pizza")
+                        .append("quantity", 2)
+                        .append("price", 500)
+                        .append("city", "Bangalore")
+                        .append("status", "Delivered"),
+
+                new Document("order_id", 102)
+                        .append("customer_name", "Anjali")
+                        .append("restaurant", "KFC")
+                        .append("food_item", "Burger")
+                        .append("quantity", 1)
+                        .append("price", 250)
+                        .append("city", "Hyderabad")
+                        .append("status", "Pending"),
+
+                new Document("order_id", 103)
+                        .append("customer_name", "Vikram")
+                        .append("restaurant", "Dominos")
+                        .append("food_item", "Pizza")
+                        .append("quantity", 3)
+                        .append("price", 750)
+                        .append("city", "Bangalore")
+                        .append("status", "Delivered"),
+
+                new Document("order_id", 104)
+                        .append("customer_name", "Sneha")
+                        .append("restaurant", "McDonalds")
+                        .append("food_item", "Fries")
+                        .append("quantity", 2)
+                        .append("price", 200)
+                        .append("city", "Chennai")
+                        .append("status", "Pending"),
+
+                new Document("order_id", 105)
+                        .append("customer_name", "Arjun")
+                        .append("restaurant", "KFC")
+                        .append("food_item", "Chicken")
+                        .append("quantity", 2)
+                        .append("price", 600)
+                        .append("city", "Bangalore")
+                        .append("status", "Delivered")
+        ));
+
+        System.out.println("Sample Data Inserted!");
+    }
+
+    // ================= READ =================
+    static void viewAll() {
+        for (Document d : orders.find()) {
+            System.out.println(d.toJson());
+        }
+    }
+
+    static void ordersByCity() {
+        sc.nextLine();
+        System.out.print("Enter City: ");
+        String city = sc.nextLine();
+
+        for (Document d : orders.find(eq("city", city))) {
+            System.out.println(d.toJson());
+        }
+    }
+
+    static void deliveredOrders() {
+        for (Document d : orders.find(eq("status", "Delivered"))) {
+            System.out.println(d.toJson());
+        }
+    }
+
+    // ================= AGGREGATION =================
+
+    static void revenueByCity() {
+        AggregateIterable<Document> result = orders.aggregate(java.util.Arrays.asList(
+                new Document("$group",
+                        new Document("_id", "$city")
+                                .append("totalRevenue", new Document("$sum", "$price")))
+        ));
+
+        for (Document d : result) {
+            System.out.println(d.toJson());
+        }
+    }
+
+    static void mostOrderedItem() {
+        AggregateIterable<Document> result = orders.aggregate(java.util.Arrays.asList(
+                new Document("$group",
+                        new Document("_id", "$food_item")
+                                .append("totalOrders", new Document("$sum", "$quantity"))),
+                new Document("$sort", new Document("totalOrders", -1)),
+                new Document("$limit", 1)
+        ));
+
+        for (Document d : result) {
+            System.out.println(d.toJson());
+        }
+    }
+
+    static void avgByRestaurant() {
+        AggregateIterable<Document> result = orders.aggregate(java.util.Arrays.asList(
+                new Document("$group",
+                        new Document("_id", "$restaurant")
+                                .append("avgPrice", new Document("$avg", "$price")))
+        ));
+
+        for (Document d : result) {
+            System.out.println(d.toJson());
+        }
+    }
+
+    static void statusCount() {
+        AggregateIterable<Document> result = orders.aggregate(java.util.Arrays.asList(
+                new Document("$group",
+                        new Document("_id", "$status")
+                                .append("count", new Document("$sum", 1)))
+        ));
+
+        for (Document d : result) {
+            System.out.println(d.toJson());
+        }
+    }
+
+    // ================= ADVANCED =================
+
+    static void priceGreaterThan300() {
+        for (Document d : orders.find(gt("price", 300)).sort(descending("price"))) {
+            System.out.println(d.toJson());
+        }
+    }
+
+    // ================= INDEX =================
+
+    static void createIndexes() {
+        orders.createIndex(new Document("customer_name", 1));
+        orders.createIndex(new Document("city", 1));
+        System.out.println("Indexes Created!");
     }
 }
