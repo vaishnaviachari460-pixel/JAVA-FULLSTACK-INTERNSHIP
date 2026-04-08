@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fitness Registration</title>
+</head>
+<body>
+
+<h1>Fitness Registration Form</h1>
+
+<form>
+    <!-- Name -->
+    Name: <input type="text" name="name" required><br><br>
+
+    <!-- Age -->
+    Age: <input type="number" name="age" min="16" required><br><br>
+
+    <!-- Gender -->
+    Gender:
+    <input type="radio" name="gender" value="Male" required> Male
+    <input type="radio" name="gender" value="Female"> Female
+    <input type="radio" name="gender" value="Other"> Other
+    <br><br>
+
+    <!-- Fitness Goal -->
+    Fitness Goal:
+    <select required>
+        <option value="">Select</option>
+        <option>Weight Loss</option>
+        <option>Muscle Gain</option>
+        <option>Flexibility</option>
+    </select>
+    <br><br>
+
+    <!-- Workout Time -->
+    Preferred Workout Time:
+    <input type="time" required><br><br>
+
+    <!-- Terms -->
+    <input type="checkbox" required> I agree to health terms
+    <br><br>
+
+    <!-- Buttons -->
+    <input type="submit" value="Submit">
+    <input type="reset" value="Reset">
+</form>
+
+<hr>
+
+<h2>Workout Videos</h2>
+
+<!-- YouTube Videos -->
+<iframe width="400" height="250"
+src="https://www.youtube.com/embed/UBMk30rjy0o"
+title="Workout Video 1" allowfullscreen></iframe>
+
+<iframe width="400" height="250"
+src="https://www.youtube.com/embed/ml6cT4AZdqI"
+title="Workout Video 2" allowfullscreen></iframe>
+
+</body>
+</html>
