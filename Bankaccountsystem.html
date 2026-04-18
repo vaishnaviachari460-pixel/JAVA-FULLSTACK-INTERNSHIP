@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bank System</title>
+</head>
+<style>
+    body {
+    font-family: Arial;
+    background: #f0f4f8;
+}
+
+.container {
+    width: 300px;
+    margin: 100px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 10px gray;
+}
+
+input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+button {
+    padding: 10px;
+    margin: 5px;
+    border: none;
+    background: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0056b3;
+}
+</style>
+<body>
+
+<div class="container">
+    <h2>Bank Account</h2>
+
+    <input type="number" id="amount" placeholder="Enter Amount">
+    <input type="number" id="pin" placeholder="Enter PIN">
+
+    <button onclick="deposit()">Deposit</button>
+    <button onclick="withdraw()">Withdraw</button>
+    <button onclick="checkBalance()">Check Balance</button>
+
+    <p id="output"></p>
+</div>
+<script>
+    class Product {
+    constructor(name, price) {
+        this.name = name;
+        this.price = price;
+    }
+}
+
+class Cart {
+    constructor() {
+        this.items = [];
+        this.discount = 0;
+    }
+
+    addItem(product, quantity = 1) {
+        let existing = this.items.find(item => item.product.name === product.name);
+
+        if (existing) {
+            existing.quantity += quantity;
+        } else {
+            this.items.push({ product, quantity });
+        }
+    }
+
+    removeItem(productName) {
+        this.items = this.items.filter(item => item.product.name !== productName);
+    }
+
+    applyCoupon(code) {
+        if (code === "SAVE10") {
+            this.discount = 0.10;
+        } else if (code === "SAVE20") {
+            this.discount = 0.20;
+        } else {
+            console.log("Invalid coupon");
+        }
+    }
+
+    getTotal() {
+        let total = 0;
+
+        this.items.forEach(item => {
+            total += item.product.price * item.quantity;
+        });
+
+        let discountAmount = total * this.discount;
+        let finalTotal = total - discountAmount;
+
+        console.log(`Total: ₹${total}`);
+        console.log(`Discount: ₹${discountAmount}`);
+        console.log(`Final Price: ₹${finalTotal}`);
+    }
+
+    showCart() {
+        console.log("Cart Items:");
+        this.items.forEach(item => {
+            console.log(`${item.product.name} x ${item.quantity}`);
+        });
+    }
+}
+
+// Usage
+let p1 = new Product("Laptop", 50000);
+let p2 = new Product("Phone", 20000);
+
+let cart = new Cart();
+
+cart.addItem(p1, 1);
+cart.addItem(p2, 2);
+cart.addItem(p1, 1); // increase quantity
+
+cart.showCart();
+
+cart.applyCoupon("SAVE10");
+cart.getTotal();
+
+cart.removeItem("Phone");
+cart.showCart();
+</script>
+</body>
+</html>

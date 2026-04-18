@@ -1,0 +1,20 @@
+.container { 
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px; 
+    padding: 15px; 
+    background-color: black; 
+}
+
+.container img { 
+    width: 100%; 
+    aspect-ratio: 16/9;   /* ✅ keeps all images same shape */
+    object-fit: cover; 
+    border-radius: 15px; 
+    transition: transform 0.3s ease, filter 0.3s ease; 
+}
+
+.container img:hover { 
+    transform: scale(1.05); 
+    filter: brightness(1.2);
+}
