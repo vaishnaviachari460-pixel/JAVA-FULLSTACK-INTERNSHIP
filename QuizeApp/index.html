@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quiz App</title>
+  <style>
+    body { font-family: Arial; }
+    .question { margin-bottom: 15px; }
+  </style>
+</head>
+<body>
+
+<h2>Quiz App</h2>
+
+<form id="quizForm"></form>
+
+<button onclick="submitQuiz()">Submit</button>
+
+<h3 id="result"></h3>
+
+<script>
+
+// Questions
+let questions = [
+  {
+    id: 1,
+    question: "2 + 2 = ?",
+    options: ["2", "4", "6", "8"],
+    answer: "4"
+  },
+  {
+    id: 2,
+    question: "Capital of India?",
+    options: ["Mumbai", "Delhi", "Chennai", "Kolkata"],
+    answer: "Delhi"
+  }
+];
+
+// Display Questions
+function displayQuestions() {
+  let form = document.getElementById("quizForm");
+  form.innerHTML = "";
+
+  questions.forEach(q => {
+    let div = document.createElement("div");
+    div.classList.add("question");
+
+    div.innerHTML = `<p><b>${q.question}</b></p>` +
+      q.options.map(opt =>
+        `<input type="radio" name="${q.id}" value="${opt}"> ${opt}<br>`
+      ).join("");
+
+    form.appendChild(div);
+  });
+}
+
+// Calculate Score
+function submitQuiz() {
+  let score = 0;
+
+  questions.forEach(q => {
+    let selected = document.querySelector(
+      `input[name="${q.id}"]:checked`
+    );
+
+    if (selected && selected.value === q.answer) {
+      score++;
+    }
+  });
+
+  document.getElementById("result").innerText =
+    `Your Score: ${score} / ${questions.length}`;
+}
+
+// Load questions on page load
+displayQuestions();
+
+</script>
+
+</body>
+</html>
