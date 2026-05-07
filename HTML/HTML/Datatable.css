@@ -1,0 +1,86 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Dashboard Layout using Grid */
+.dashboard {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    background: #333;
+    color: white;
+    padding: 20px;
+}
+
+.sidebar h2 {
+    margin-bottom: 20px;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar ul li {
+    margin: 15px 0;
+    cursor: pointer;
+}
+
+/* Main Content */
+.main-content {
+    padding: 20px;
+    background: #f4f4f4;
+}
+
+/* Table Container (for scroll on small screens) */
+.table-container {
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    min-width: 500px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background: #667eea;
+    color: white;
+}
+
+/* Alternate Row Colors using nth-child */
+tbody tr:nth-child(even) {
+    background: #f2f2f2;
+}
+
+/* Hover Highlight */
+tbody tr:hover {
+    background: #d6e0ff;
+    cursor: pointer;
+}
+
+/* Responsive Layout */
+@media (max-width: 768px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        text-align: center;
+    }
+}

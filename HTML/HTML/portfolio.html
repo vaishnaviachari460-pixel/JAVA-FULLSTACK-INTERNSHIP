@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    background: linear-gradient(to right, #dbeafe, #c7d2fe);
+}
+
+/* HEADER */
+header {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+header h1 {
+    font-size: 40px;
+}
+
+header span {
+    color: #2563eb;
+}
+
+header p {
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+/* NAVBAR */
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    background: white;
+    padding: 15px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+}
+
+nav a {
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+}
+
+nav a:hover {
+    color: #2563eb;
+}
+
+/* SECTION */
+section {
+    padding: 40px;
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+/* SKILLS */
+.skills {
+    max-width: 500px;
+    margin: auto;
+}
+
+.skill {
+    margin-bottom: 15px;
+}
+
+.skill p {
+    display: flex;
+    justify-content: space-between;
+}
+
+.bar {
+    height: 8px;
+    background: #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.fill {
+    height: 100%;
+    background: #2563eb;
+}
+
+/* PROJECTS */
+.projects {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.project {
+    background: white;
+    width: 250px;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
+
+.project:hover {
+    transform: translateY(-10px);
+}
+
+/* CONTACT */
+input, textarea {
+    width: 80%;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    background: #2563eb;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+/* FOOTER */
+footer {
+    background: #111;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* RESPONSIVE */
+@media(max-width: 600px) {
+    nav {
+        flex-direction: column;
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+    <h1>Responsive <span>Portfolio Website</span></h1>
+    <p>Vaishnavi Achari | Web Developer</p>
+</header>
+
+<nav>
+    <a href="#about">Home</a>
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#projects">Work</a>
+    <a href="#contact">Contact</a>
+</nav>
+
+<section id="about">
+    <h2>About Me</h2>
+    <p>I am a passionate Computer Science student who loves building modern and responsive websites.</p>
+</section>
+
+<section id="skills">
+    <h2>Skills</h2>
+
+    <div class="skills">
+
+        <div class="skill">
+            <p>JavaScript <span>65%</span></p>
+            <div class="bar"><div class="fill" style="width:65%"></div></div>
+        </div>
+
+        <div class="skill">
+            <p>UI/UX <span>85%</span></p>
+            <div class="bar"><div class="fill" style="width:85%"></div></div>
+        </div>
+
+        <div class="skill">
+            <p>Java <span>75%</span></p>
+            <div class="bar"><div class="fill" style="width:75%"></div></div>
+        </div>
+
+    </div>
+</section>
+
+<section id="projects">
+    <h2>Work</h2>
+
+    <div class="projects">
+
+        <div class="project">
+            <h3>Fitness Website</h3>
+            <p>Workout and health tracking site.</p>
+        </div>
+
+        <div class="project">
+            <h3>Event Registration</h3>
+            <p>Form with validation.</p>
+        </div>
+
+        <div class="project">
+            <h3>Portfolio Website</h3>
+            <p>Responsive personal website.</p>
+        </div>
+
+    </div>
+</section>
+
+<section id="contact">
+    <h2>Contact</h2>
+    <input type="text" placeholder="Your Name"><br>
+    <input type="email" placeholder="Your Email"><br>
+    <textarea placeholder="Your Message"></textarea><br>
+    <button>Send Message</button>
+</section>
+
+<footer>
+    <p>© 2026 Vaishnavi Achari</p>
+</footer>
+
+</body>
+</html>
